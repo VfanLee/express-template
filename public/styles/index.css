@@ -1,0 +1,6 @@
+h1 {
+  width: fit-content;
+  background: linear-gradient(45deg, #353535, #259dff);
+  background-clip: text;
+  color: transparent;
+}
