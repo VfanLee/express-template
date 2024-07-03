@@ -2,9 +2,10 @@ import { join } from 'node:path'
 
 import { Router } from 'express'
 import multer from 'multer'
-import Mock from 'mockjs'
 import { isEmail, isNull } from '../utils/valid.js'
 import { createError } from '../utils/error.js'
+
+import { users } from '../data/index.js'
 
 const router = Router()
 
@@ -46,8 +47,13 @@ router.post('/login', (req, res, next) => {
     return next(createError('email vaild fail'))
   }
 
+  const exists = users.some(u => u.email === email)
+  if (!exists) {
+    return next(createError("user doesn't exist", 404))
+  }
+
   const data = {
-    token: Mock.mock('@string(12)'),
+    token: Math.random().toString(16).slice(2),
   }
   res.status(200).json(data)
 })

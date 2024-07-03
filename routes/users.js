@@ -1,11 +1,10 @@
 import { Router } from 'express'
 import { isEmail, isNull, isObject } from '../utils/valid.js'
 import { createError } from '../utils/error.js'
-import mockUsers from '../mock/users.json' assert { type: 'json' }
-import Mock from 'mockjs'
+import { users } from '../data/index.js'
+import { v4 as uuidv4 } from 'uuid'
 
 const router = Router()
-const users = mockUsers
 
 // read
 router.get('/', (req, res, next) => {
@@ -56,7 +55,7 @@ router.get('/:id', (req, res, next) => {
   const user = users.find(p => p.id === params.id)
 
   if (!isObject(user)) {
-    return next(createError('user does not exist', 404))
+    return next(createError("user doesn't exist", 404))
   }
 
   res.status(200).json(user)
@@ -82,7 +81,7 @@ router.post('/', (req, res, next) => {
   }
 
   const user = {
-    id: Mock.mock('@guid'),
+    id: uuidv4(),
     email,
     name,
     avatar,
@@ -112,12 +111,11 @@ router.put('/:id', (req, res, next) => {
   const index = users.findIndex(p => p.id === params.id)
 
   if (index === -1) {
-    return next(createError('user does not exist'), 404)
+    return next(createError("user doesn't exist"), 404)
   }
 
   if (users.some((user, idx) => idx !== index && user.email === email)) {
-    const error = createError('email already exists')
-    return next(error)
+    return next(createError('email already exists'))
   }
 
   users[index] = {
@@ -137,7 +135,7 @@ router.delete('/:id', (req, res, next) => {
   const index = users.findIndex(p => p.id === params.id)
 
   if (index === -1) {
-    return next(createError('user does not exist'), 404)
+    return next(createError("user doesn't exist"), 404)
   }
 
   users.splice(index, 1)

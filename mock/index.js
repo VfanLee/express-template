@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-
+// http://mockjs.com/examples.html
 import Mock from 'mockjs'
 
 const users = []
